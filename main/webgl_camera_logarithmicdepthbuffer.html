@@ -70,8 +70,8 @@
 				display: flex;
 				flex-direction: column;
 				width: 20%;
-				height: 80%;
-				background-color: #000000;
+				height: 90%;
+				background-color: #5c5c5cb2;
 				color: #fff;
 				padding: 10px;
 				border: 2px solid #ffffff;
@@ -102,14 +102,13 @@
 		</div>
 
 		<div id="sidepanel">
-			<h3>Your conversation with our ai astronaut</h3>
+			<h3>Your conversation with Cosmic Companion</h3>
 		</div>
 
 		<div id="info">
 			<a href="https://threejs.org" target="_blank" rel="noopener"
-				>Cosmic Comparison</a
-			>
-			- :'D<br />
+				>Cosmic Comparison</a>
+			<br />
 			Scroll to zoom through space!
 		</div>
 
@@ -150,13 +149,12 @@
 			// Try to use some descriptive real-world examples of objects at each scale
 
 			const labeldata = [
-				{
-					size: 0.01,
-					scale: 0.000000000000000000000000000000001,
-					label: "string (1 planck length)",
-				},
-				{ size: 0.01, scale: 0.0000000000000001, label: "proton (1fm)" },
-				{ size: 0.01, scale: 0.0000001, label: "DNA width (1nm)" },
+				// {
+				// 	size: 0.01,
+				// 	scale: 0.000000000000000000000000000000001,
+				// 	label: "string (1 planck length)",
+				// },
+				// { size: 0.01, scale: 0.0000000000000001, label: "proton (1fm)" },
 				{ size: 0.01, scale: 0.0001, label: "mitochondrion (1µm)" },
 				{ size: 0.01, scale: 0.1, label: "needle width (1mm)" },
 				{ size: 0.01, scale: 1.0, label: "jelly bean (1cm)" },
@@ -167,12 +165,18 @@
 				{ size: 10000, scale: 1.0, label: "vatican city (10km)" },
 				{ size: 3400000, scale: 1.0, label: "the moon (3,400 Km)" },
 				{ size: 12000000, scale: 1.0, label: "earth (12,000 km)" },
+				{ size: 139.82e6, scale: 1.0, label: "jupiter" },
 				{ size: 1400000000, scale: 1.0, label: "the sun (1,400,000 km)" },
 				{ size: 1e13, scale: 1.0, label: "our solar system (200,000 Au)" },
 				{
-					size: 1e15,
+					size: 24462028800000,
 					scale: 1.0,
-					label: "average distance between suns (1 light year)",
+					label: "distance from voyager 1 to earth",
+				},
+				{
+					size: 1e21,
+					scale: 1.0,
+					label: "milky way",
 				},
 				{ size: 1e16, scale: 1.0, label: "open star clusters (1 parsec)" },
 				{ size: 1e17, scale: 1.0, label: "nebulae (1 parsec)" },
@@ -208,6 +212,7 @@
 						label: createLabel("Fixed", size),
 					});
 				}
+				labeldata.sort((a, b) => a.size - b.size);
 			}
 
 			function createLabel(userInput, size) {
