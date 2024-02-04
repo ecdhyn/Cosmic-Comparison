@@ -519,12 +519,12 @@
 						console.log(queryParams);
 
 						isProcessing = true;
-						let result = fetch("http://localhost:5000/api/query", queryParams)
+						let result = fetch("http://127.0.0.1:8000/api/query", queryParams)
 							.then((response) => response.json())
 							.then((data) => {
 								messages.push({
 									role: "assistant",
-									content: data.result,
+									content: data.result.toString(),
 								});
 								isProcessing = false;
 								return data.result;
@@ -539,12 +539,11 @@
 					} else {
 						messages.push({
 							role: "user",
-							content: `${message}?`,
+							content: message,
 						});
 
 						const queryParams = {
 							method: "POST",
-              mode: "no-cors",
 							headers: {
 								"Content-Type": "application/json",
                 "Access-Control-Allow-Origin": "*",
@@ -552,8 +551,10 @@
 							body: JSON.stringify({ arg: messages }),
 						};
 
+            console.log(queryParams)
+
 						isProcessing = true;
-						let result = fetch("http://localhost:5000/api/message", queryParams)
+						let result = fetch("http://127.0.0.1:8000/api/message", queryParams)
 							.then((response) => response.json())
 							.then((data) => {
 								console.log(data);
@@ -578,11 +579,15 @@
 					return messages;
 				}
 
-				return [add, getMessages];
+        function clear() {
+          messages = [];
+        }
+
+				return [add, getMessages, clear];
 			}
 
 			function textInput() {
-				const [add, getMessages] = addMessage();
+				const [add, getMessages, clear] = addMessage();
 
 				const input = document.getElementById("search-input");
 				input.addEventListener("keypress", function (event) {
@@ -593,7 +598,9 @@
 
 						input.value = "";
 
-						add(word).then(() => console.log("done"));
+						add(word).then((x) => {
+              console.log(x);
+            });
 					}
 				});
 			}
