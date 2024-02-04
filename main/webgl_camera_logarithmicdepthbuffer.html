@@ -212,6 +212,7 @@
 					animate();
 
           confSizeScale(10);
+		  addSphere(1.0, 1.0, "LETS GO")
 				} );
 
 				stats = new Stats();
@@ -254,11 +255,12 @@
 					camera: camera,
 				};
 			}
+			let scene;
+			function initScene( font ) {
 
-			function initScene(font) {
-				const scene = new THREE.Scene();
+				scene = new THREE.Scene();
 
-				scene.add(new THREE.AmbientLight(0x777777));
+				scene.add( new THREE.AmbientLight( 0x777777 ) );
 
 				const light = new THREE.DirectionalLight(0xffffff, 3);
 				light.position.set(100, 100, 100);
@@ -470,74 +472,48 @@
 					"modify time scale": 1.0,
 				};
 
-				// const baseNames = [ 'None', ...Object.keys( baseActions ) ];
-
-				// for ( let i = 0, l = baseNames.length; i !== l; ++ i ) {
-
-				// 	const name = baseNames[ i ];
-				// 	const settings = baseActions[ name ];
-				// 	panelSettings[ name ] = function () {
-
-				// 		const currentSettings = baseActions[ currentBaseAction ];
-				// 		const currentAction = currentSettings ? currentSettings.action : null;
-				// 		const action = settings ? settings.action : null;
-
-				// 		if ( currentAction !== action ) {
-
-				// 			prepareCrossFade( currentAction, action, 0.35 );
-
-				// 		}
-
-				// 	};
-
-				// 	crossFadeControls.push( folder1.add( panelSettings, name ) );
-
-				// }
-
-				// for ( const name of Object.keys( additiveActions ) ) {
-
-				// 	const settings = additiveActions[ name ];
-
-				// 	panelSettings[ name ] = settings.weight;
-				// 	folder2.add( panelSettings, name, 0.0, 1.0, 0.01 ).listen().onChange( function ( weight ) {
-
-				// 		setWeight( settings.action, weight );
-				// 		settings.weight = weight;
-
-				// 	} );
-
-				// }
-
-				// folder3.add( panelSettings, 'modify time scale', 0.0, 1.5, 0.01 ).onChange( modifyTimeScale );
+				
 
 				folder1.open();
 				folder2.open();
 				folder3.open();
 
-				// crossFadeControls.forEach( function ( control ) {
-
-				// 	control.setInactive = function () {
-
-				// 		control.domElement.classList.add( 'control-inactive' );
-
-				// 	};
-
-				// 	control.setActive = function () {
-
-				// 		control.domElement.classList.remove( 'control-inactive' );
-
-				// 	};
-
-				// 	const settings = baseActions[ control.property ];
-
-				// 	if ( ! settings || ! settings.weight ) {
-
-				// 		control.setInactive();
-
-				// 	}
-
-				// } );
+			
 			}
+
+			function addSphere(size, scale, label, position = {x: 0, y: 0, z: 0}) {
+    if (!scene) {
+        console.error('Scene is not defined.');
+        return;
+    }
+
+    const geometry = new THREE.SphereGeometry(size, 32, 32);
+    const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+    const sphere = new THREE.Mesh(geometry, material);
+
+    sphere.scale.set(scale, scale, scale);
+    sphere.position.set(position.x, position.y, position.z);
+
+    // Add the sphere to the scene
+    scene.add(sphere);
+
+    // Optionally, add a label using TextGeometry
+    const loader = new FontLoader();
+    loader.load('fonts/helvetiker_regular.typeface.json', function (font) {
+        const textGeometry = new TextGeometry(label, {
+            font: font,
+            size: 0.5,
+            height: 0.2,
+        });
+        const textMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
+        const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+
+        // Adjust textMesh position relative to sphere
+        textMesh.position.set(position.x, position.y + size, position.z);
+
+        scene.add(textMesh);
+    });
+}
 
 			function addMessage() {
 				let isProcessing = false;
