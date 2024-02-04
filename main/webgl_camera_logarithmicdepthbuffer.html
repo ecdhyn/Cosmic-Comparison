@@ -65,6 +65,21 @@
 				border-radius: 10px;
 				max-width: 1200px;
 			}
+
+			#sidepanel {
+        display: flex;
+        flex-direction: column;
+				width: 20%;
+        height: 100%;
+				background-color: #000000;
+        color: #fff;
+				padding: 10px;
+        border: 2px solid #ffffff;
+				align-items: left;
+				position: absolute;
+				top: 0;
+				right: 0;
+			}
 		</style>
 	</head>
 	<body>
@@ -85,6 +100,11 @@
 				placeholder="Type an object to size!"
 			/>
 		</div>
+
+		<div id="sidepanel">
+      <h3>Your conversation with our ai astronaut</h3>
+
+    </div>
 
 		<div id="info">
 			<a href="https://threejs.org" target="_blank" rel="noopener"
@@ -161,12 +181,10 @@
 					// Initialize two copies of the same scene, one with normal z-buffer and one with logarithmic z-buffer
 					objects.normal = initView(scene, "normal", false);
 					objects.logzbuf = initView(scene, "logzbuf", true);
-					createPanel();
+					// createPanel();
 					textInput();
 					animate();
-
-
-				} );
+				});
 
 				stats = new Stats();
 				container.appendChild(stats.dom);
@@ -209,8 +227,7 @@
 				};
 			}
 
-			function initScene( font ) {
-
+			function initScene(font) {
 				const scene = new THREE.Scene();
 
 				scene.add(new THREE.AmbientLight(0x777777));
@@ -507,14 +524,16 @@
 							role: "user",
 							content: `Can you please estimate to the best of your ability the size or diameter of a/the ${message}?`,
 						});
-						console.log("Bob");
-
+						messages.push({
+							role: "system",
+							content: `?`,
+						});
 
 						const queryParams = {
 							method: "POST",
 							headers: {
 								"Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
+								"Access-Control-Allow-Origin": "*",
 							},
 							body: JSON.stringify({ arg: message }),
 						};
@@ -549,12 +568,12 @@
 							method: "POST",
 							headers: {
 								"Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
+								"Access-Control-Allow-Origin": "*",
 							},
 							body: JSON.stringify({ arg: messages }),
 						};
 
-            console.log(queryParams)
+						console.log(queryParams);
 
 						isProcessing = true;
 						let result = fetch("http://127.0.0.1:8000/api/message", queryParams)
@@ -582,9 +601,9 @@
 					return messages;
 				}
 
-        function clear() {
-          messages = [];
-        }
+				function clear() {
+					messages = [];
+				}
 
 				return [add, getMessages, clear];
 			}
@@ -593,17 +612,35 @@
 				const [add, getMessages, clear] = addMessage();
 
 				const input = document.getElementById("search-input");
+				const messagePanel = document.getElementById("sidepanel");
 				input.addEventListener("keypress", function (event) {
 					if (event.key === "Enter") {
 						event.preventDefault();
 						const word = input.value.trim();
 						console.log(word); // later for testing, replace this with openAI stuff
 
+            var userText = document.createElement('p');
+            userText.textContent = word;
+            
+            messagePanel.appendChild(userText);
+
 						input.value = "";
 
-        }
-    });
-}
+						add(word)
+							.then((response) => {
+								console.log(response);
+								console.log(getMessages());
+
+                var content = document.createTextNode(response.toString());
+
+								messagePanel.appendChild(content);
+							})
+							.catch((error) => {
+								console.error("Error:", error);
+							});
+					}
+				});
+			}
 		</script>
 	</body>
 </html>
