@@ -152,6 +152,7 @@
 					createPanel();
 					textInput();
 					animate();
+					addSphere(1.0, 1.0, "LETS GO")
 
 
 				} );
@@ -187,9 +188,10 @@
 
 			}
 
+			let scene;
 			function initScene( font ) {
 
-				const scene = new THREE.Scene();
+				scene = new THREE.Scene();
 
 				scene.add( new THREE.AmbientLight( 0x777777 ) );
 
@@ -464,6 +466,41 @@ function textInput() {
         }
     });
 }
+function addSphere(size, scale, label, position = {x: 0, y: 0, z: 0}) {
+    if (!scene) {
+        console.error('Scene is not defined.');
+        return;
+    }
+
+    const geometry = new THREE.SphereGeometry(size, 32, 32);
+    const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+    const sphere = new THREE.Mesh(geometry, material);
+    
+    sphere.scale.set(scale, scale, scale);
+    sphere.position.set(position.x, position.y, position.z);
+    
+    // Add the sphere to the scene
+    scene.add(sphere);
+    
+    // Optionally, add a label using TextGeometry
+    const loader = new FontLoader();
+    loader.load('fonts/helvetiker_regular.typeface.json', function (font) {
+        const textGeometry = new TextGeometry(label, {
+            font: font,
+            size: 0.5,
+            height: 0.2,
+        });
+        const textMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
+        const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+        
+        // Adjust textMesh position relative to sphere
+        textMesh.position.set(position.x, position.y + size, position.z);
+        
+        scene.add(textMesh);
+    });
+}
+
+
 		</script>
 	</body>
 </html>
