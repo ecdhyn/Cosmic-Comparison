@@ -550,11 +550,11 @@
 					if (messages.length == 0) {
 						messages.push({
 							role: "user",
-							content: `Can you please estimate to the best of your ability the size or diameter of a/the ${message}?`,
+							content: `Can you please estimate to the best of your ability the average size or diameter of a/the ${message}? I only want your best guess; do not apologize if this number can very.`,
 						});
 						messages.push({
 							role: "system",
-							content: `?`,
+							content: `I am a visually-impaired individual, who finds it difficult to read to begin with. For this reason, I ask that you refrain from using any extraneous and unnecessary communication. I ask that you cease all apologies and explanations of your nature as an AI. I already know what you are and every extra word I need to read causes me unnecessary pain.`,
 						});
 
 						const queryParams = {
@@ -574,7 +574,7 @@
 							.then((data) => {
 								messages.push({
 									role: "assistant",
-									content: data.result.toString(),
+									content: "Your object is approximately " + data.result.toString() + " meters.",
 								});
 								isProcessing = false;
 								return data.result;
@@ -608,12 +608,13 @@
 							.then((response) => response.json())
 							.then((data) => {
 								console.log(data);
+
 								messages.push({
 									role: "assistant",
 									content: data.result,
 								});
 								isProcessing = false;
-								return data.result;
+								return data.result.toString();
 							})
 							.catch((error) => {
 								console.error("Error:", error);
