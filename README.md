@@ -1,5 +1,7 @@
 # Cosmic Comparison
 
+![Alt text](/Cosmic%20Comparison.png)
+
 **Cosmic Comparison**, first and foremost, is a 3D-simulation to explore the size of objects in the universe. It also calls the OpenAI API, which takes in a user-inputted object (e.g., “Castle”) and asks GPT to return an estimated size for the object. 
 
 ## Inspiration
