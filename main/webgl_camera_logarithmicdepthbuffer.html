@@ -191,7 +191,7 @@
 
 			function createLabel(userInput, size) 
 			{
-				label = userInput + " (" + size + ")";
+				let label = userInput + " (" + size + ")";
 			}
 
 			let panelSettings;
@@ -584,6 +584,12 @@
 							.then((response) => response.json())
 							.then((data) => {
 								console.log(data);
+								console.log(data.result);
+
+                confSizeScale(data);
+                console.log(labeldata)
+
+
 
 								messages.push({
 									role: "assistant",
